@@ -1,0 +1,104 @@
+
+// Create dependencies
+
+Right click on dependencies in LearningHub.API => Add project reference => Choose LearningHub.Core & LearningHub.Infra => Ok
+
+Right click on dependencies in LearningHub.Infra => Add project reference => Choose LearningHub.Core => Ok
+
+//
+
+// LearningHub.Infra Packages
+
+Microsoft.Extensions.Configuration.Abstractions
+Microsoft.Data.SqlClient
+Dapper
+Microsoft.EntityFrameworkCore.Tools
+Oracle.ManagedDataAccess.CoreODP.NetCore 
+System.IdentityModel.Tokens.Jwt
+Microsoft.AspNetCore.Authentication.JwtBearer 
+//
+
+// LearningHub.Core Packages
+
+ Oracle. EntityFrameworkCore
+
+//
+
+//LearningHub.API Packages
+
+Microsoft.EntityFrameworkCore.Design
+
+//
+
+// in json
+
+  "ConnectionStrings": {
+    "DBConnectionString": "Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = mohammad)(SERVICE_NAME = orcl)));User Id=mohammad;Password=mohammad1999;Persist Security Info=True;"
+  },
+
+//
+
+//Create Common Folder
+
+Right Click on LearningHub.Infra => Add => New Folder => Common.
+Right Click on LearningHub.core => Add => New Folder => Common.
+
+//
+
+// Create DbContext Class and Interface
+Right Click on Common in LearningHub.Core => Add => Class => Choose Interface => IDbContext.
+Right Click on Common in LearningHub.Infra => Add => Class => DbContext.
+
+//
+
+// in console
+
+Scaffold-DbContext "USER ID=mohammad;PASSWORD=mohammad1999;DATA SOURCE=localhost:1521/orcl" Oracle.EntityFrameworkCore -outputdir Data
+Scaffold-DbContext "USER ID=mohammad;PASSWORD=mohammad1999;DATA SOURCE=localhost:1521/orcl" Oracle.EntityFrameworkCore -Tables RECIPE_ROLE , RECIPE_USER, RECIPE_TESTIMONIAL , RECIPE_PAGES, RECIPE_PAGES , RECIPE_CONTACT ,RECIPE_CATEGORY,RECIPE_PAYMENT ,RECIPE_BANK,RECIPE -OutputDir Data
+
+//
+
+
+
+// in Program.cs
+builder.Services.AddAuthentication(opt => {
+opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+   .AddJwtBearer(options =>
+   {
+   options.TokenValidationParameters = new TokenValidationParameters
+   {
+       ValidateIssuer = true,
+       ValidateAudience = true,
+       ValidateLifetime = true,
+       ValidateIssuerSigningKey = true,
+       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+   };
+   });
+
+builder.Services.AddCors(corsOptions =>
+{
+	corsOptions.AddPolicy("policy",
+	builder =>
+	{
+		builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+	});
+});
+
+app.UseCors("policy");
+
+builder.Services.AddScoped<IDbContext,DbContext>();
+builder.Services.AddScoped<ICourseRepository,CourseRepository>();
+builder.Services.AddScoped<IStudentRepository,StudentRepository>();
+builder.Services.AddScoped<IStudentCourseRepository,StudentCourseRepository>();
+
+//
+
+// Create Repository Folder
+ Right Click on LearningHub.Infra => Add => New Folder => Repository.
+ Right Click on LearningHub.Core => Add => New Folder => Repository.
+ Right Click on Repository Folder in LearningHub.Core => Add => Class => Interface => ICourseRepository.
+ Right Click on Repository Folder in LearningHub.Infra => Add => Class => CourseRepository.
+
+//
