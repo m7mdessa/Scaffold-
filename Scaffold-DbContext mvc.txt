@@ -1,0 +1,36 @@
+// in console
+
+Scaffold-DbContext "USER ID=mohammad;PASSWORD=mohammad1999;DATA SOURCE=localhost:1521/orcl" Oracle.EntityFrameworkCore -outputdir Models 
+
+Scaffold-DbContext "USER ID=mohammad;PASSWORD=mohammad1999;DATA SOURCE=localhost:1521/orcl" Oracle.EntityFrameworkCore -Tables RECIPE_ROLE , RECIPE_USER -OutputDir Models
+
+//
+
+// in json
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = mohammad)(SERVICE_NAME = orcl)));User Id=mohammad;Password=mohammad1999;Persist Security Info=True;"
+  },
+
+//
+
+// in Program.cs
+
+builder.Services.AddDbContext<ModelContext>(options=>options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddSession(options => options.IOTimeout = TimeSpan.FromMinutes(60));
+
+app.UseSession();
+
+//
+
+// Packages
+iTextSharp
+Microsoft.Entity FrameworkCore
+Microsoft.EntityFrameworkCore.SqlServer 
+Microsoft.EntityFrameworkCore.Tools
+Microsoft.VisualStudio.Web.CodeGeneration.Design 
+ODP.NetCore 
+Oracle.EntityFrameworkCore
+MimeKit
+MailKit
+//
