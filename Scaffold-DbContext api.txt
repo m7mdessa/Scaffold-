@@ -77,6 +77,8 @@ opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
    };
    });
 
+app.UseAuthentication();
+
 builder.Services.AddCors(corsOptions =>
 {
 	corsOptions.AddPolicy("policy",
